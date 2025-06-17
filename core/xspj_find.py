@@ -1,4 +1,5 @@
 # core/xspj_find.py
+# 获取学生评价批次页面的参数路径
 import re
 from utils.logger import log
 from core.login import LoginManager
@@ -9,20 +10,23 @@ class XspjFind(LoginManager):
         super().__init__()
         self.url = "http://zhjw.qfnu.edu.cn/jsxsd/xspj/xspj_find.do"
 
-    def get_xspj_id(self):
+    def get_xspj_path(self):
         """
-        获取学生评价批次页面
+        获取学生评价批次页面的参数路径
         """
         response = self.session.get(self.url)
-        xspj_id = self.extract_xspj_id(response.text)
-        log.info(f"本次评价批次的ID: {xspj_id}")
+        xspj_path = self.extract_xspj_id(response.text)
+        log.info(f"本次评价批次的参数路径: {xspj_path}")
+        return xspj_path
 
     def extract_xspj_id(self, response_text):
         """
         从响应文本中提取本次评价批次的ID
         """
         # 提取完整的评价URL
-        pattern = r'href="(/jsxsd/xspj/xspj_list\.do\?.*?)"'
+        pattern = (
+            r'<a href="/jsxsd/xspj/xspj_list.do(.*?)" title="点击进入评价">进入评价</a>'
+        )
         match = re.search(pattern, response_text)
         if match:
             return match.group(1)
@@ -38,4 +42,4 @@ if __name__ == "__main__":
         log.error("程序启动失败，无法完成初始登录。")
         exit(0)
     xspj_find = XspjFind()
-    xspj_find.get_xspj_id()
+    xspj_find.get_xspj_path()
