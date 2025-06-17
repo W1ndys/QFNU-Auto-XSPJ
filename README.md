@@ -14,6 +14,14 @@ python -m venv venv
 
 2. 激活虚拟环境
 
+在 Windows 下
+
+```cmd
+venv\Scripts\activate.bat
+```
+
+在 Linux 下
+
 ```bash
 source venv/bin/activate
 ```
