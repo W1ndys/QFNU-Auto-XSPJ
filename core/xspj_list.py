@@ -91,5 +91,7 @@ if __name__ == "__main__":
     xspj_path = xspj_find.get_xspj_path()
     # 获取评价列表
     xspj_list = XspjList(xspj_path)
-    xspj_list_json = xspj_list.get_xspj_list()
-    log.info(xspj_list_json)
+    xspj_list_json = json.loads(xspj_list.get_xspj_list())
+    log.info(
+        f"获取评价列表成功，共有{len(xspj_list_json)}条数据，任课老师有：{[item['授课教师'] for item in xspj_list_json]}"
+    )
