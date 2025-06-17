@@ -38,7 +38,7 @@ def setup_logger():
     console_handler = colorlog.StreamHandler()
     console_handler.setLevel(logging.INFO)
     console_formatter = colorlog.ColoredFormatter(
-        "%(log_color)s%(levelname)s: %(message)s%(reset)s",
+        "%(log_color)s%(asctime)s - %(levelname)s: %(message)s%(reset)s",
         log_colors={
             "DEBUG": "cyan",
             "INFO": "green",
