@@ -1,0 +1,7 @@
+requests
+pillow
+python-dotenv
+ddddocr
+beautifulsoup4
+colorlog
+lxml
