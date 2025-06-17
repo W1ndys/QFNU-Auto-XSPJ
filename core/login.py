@@ -3,8 +3,6 @@
 from PIL import Image
 from io import BytesIO
 import os
-import json
-import colorlog
 import logging
 import datetime
 from dotenv import load_dotenv
@@ -107,7 +105,7 @@ class LoginManager:
 
         # 2. 生成加密字符串
         encoded = self._generate_encoded_string()
-        log.info(f"encoded: {encoded}")
+        log.debug(f"encoded: {encoded}")
 
         # 3. 循环尝试登录
         for attempt in range(max_retries):
@@ -117,12 +115,12 @@ class LoginManager:
                 log.warning(f"获取验证码失败，稍后重试... (第 {attempt + 1} 次)")
                 time.sleep(1)
                 continue
-            log.info(f"识别出的验证码: {random_code}")
+            log.debug(f"识别出的验证码: {random_code}")
 
             try:
                 # 发起登录请求
                 response = self._login_request(random_code, encoded)
-                log.info(f"登录响应状态码: {response.status_code}")
+                log.debug(f"登录响应状态码: {response.status_code}")
 
                 if response.status_code == 200:
                     if "验证码错误" in response.text:
@@ -135,7 +133,7 @@ class LoginManager:
                         return False
                     # 登录成功后，通过访问主页最终确认
                     if self.check_login_status():
-                        log.info("登录成功!")
+                        log.debug("登录成功!")
                         return True
                     else:
                         # 可能是其他未知错误，例如账号被锁定等
