@@ -1,5 +1,5 @@
 # core/xspj_list.py
-# 获取待评价课程列表
+# 根据评价批次ID获取待评价课程列表
 from utils.logger import log
 from core.login import LoginManager
 from core.xspj_find import XspjFind
