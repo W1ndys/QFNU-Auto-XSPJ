@@ -2,12 +2,27 @@ from core.login import LoginManager
 from core.xspj_find import XspjFind
 from core.xspj_list import XspjList
 from core.xspj_save import XspjSave
+from core.toSavepj03wjpj import ToSavepj03wjpj
 from utils.logger import log
 import json
 import re
+import time
+
+
+def print_welcome_info():
+    log.info("\n" + "=" * 80)
+    log.info("欢迎使用曲阜师范大学自动评教脚本")
+    log.info("=" * 80)
+    log.info("\n\n")
+    log.info("作者: W1ndys")
+    log.info("开源地址: https://github.com/W1ndys")
+    log.info("欢迎关注微信公众号: W1ndys")
+    log.info("=" * 80)
+    log.info("\n\n")
 
 
 if __name__ == "__main__":
+    print_welcome_info()
     # 初始登录
     login_manager = LoginManager()
     if not login_manager.simulate_login():
@@ -16,6 +31,32 @@ if __name__ == "__main__":
     # 获取评价批次ID
     xspj_find = XspjFind()
     xspj_path = xspj_find.get_xspj_path()
+    if xspj_path:
+        hidden_params = xspj_find.get_hidden_params(xspj_path)
+    else:
+        log.error("无法获取评价路径，无法继续获取隐藏参数")
+        exit(0)
+
+    if hidden_params:
+        log.info("开始提交文字评价")
+        time.sleep(1)
+        # 先填最下面的文字评价，默认是A
+        toSavepj03wjpj = ToSavepj03wjpj(hidden_params)
+        toSavepj03wjpj_response = toSavepj03wjpj.save_do()
+        # 提取alert内的内容
+        alert_content = re.search(r"alert\('(.*)'\)", toSavepj03wjpj_response)
+        if alert_content:
+            toSavepj03wjpj_response = alert_content.group(1)
+        else:
+            toSavepj03wjpj_response = "未找到alert内容"
+        if "保存成功" in toSavepj03wjpj_response:
+            log.info(f"文字评价提交成功，返回结果:{toSavepj03wjpj_response}")
+        else:
+            log.error(f"文字评价提交失败，返回结果:{toSavepj03wjpj_response}")
+        log.info("文字评价提交完成")
+    else:
+        log.warning("无法获取隐藏参数，最下面的文字评价无法提交，将跳过，请手动提交")
+
     # 获取评价列表
     xspj_list = XspjList(xspj_path)
     xspj_list_json = json.loads(xspj_list.get_xspj_list())
@@ -125,7 +166,6 @@ if __name__ == "__main__":
         xspj_save_payload = xspj_save.extract_evaluation_payload(
             xspj_save_html, selected_scenario
         )
-        log.info("-" * 100)
         xspj_save_response = xspj_save.save_do(xspj_save_payload)
         # 提取alert内的内容
         alert_content = re.search(r"alert\('(.*)'\)", xspj_save_response)
