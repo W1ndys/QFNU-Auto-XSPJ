@@ -132,7 +132,7 @@ class XspjSave(LoginManager):
                 }
 
             payload = static_params.copy()
-            payload["issubmit"] = "0"  # 0是保存，1是提交
+            payload["issubmit"] = "1"  # 0是保存，1是提交
 
             for i, indicator_id in enumerate(indicator_order):
                 selected_grade = grades[i]
