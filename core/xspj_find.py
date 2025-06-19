@@ -16,7 +16,8 @@ class XspjFind(LoginManager):
         """
         response = self.session.get(self.url)
         xspj_path = self.extract_xspj_id(response.text)
-        log.info(f"本次评价批次的参数路径: {xspj_path}")
+        log.debug(f"本次评价批次的参数路径: {xspj_path}")
+        log.info("获取评价批次参数路径成功")
         return xspj_path
 
     def extract_xspj_id(self, response_text):
