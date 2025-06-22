@@ -7,7 +7,7 @@ from utils.logger import log
 import json
 import re
 import time
-import os
+import math
 import subprocess
 
 
@@ -74,8 +74,8 @@ if __name__ == "__main__":
         log.info(f"共有{len(xspj_list_json)}条数据")
 
         # 限制条件: 评价分数大于等于90, 比例不高于全部评价课程的百分之40
-        # 允许大于等于90的个数
-        max_90_count = int(len(xspj_list_json) * 0.4)
+        # 允许大于等于90的个数（向上取整）
+        max_90_count = math.ceil(len(xspj_list_json) * 0.4)
 
         log.info("\n" + "=" * 80)
         log.info("课程评教列表")
@@ -161,6 +161,32 @@ if __name__ == "__main__":
 
         # 开始执行评教
         log.info("\n开始执行自动评教...")
+
+        # 首先对所有课程进行89分预打分以清除限制
+        log.info("步骤1: 先用89分策略清除系统限制...")
+        for i, item in enumerate(xspj_list_json):
+            xspj_save = XspjSave(item["操作"]["href"])
+            clear_response = xspj_save.clear_restrictions_with_89()
+
+            # 提取alert内的内容
+            alert_content = re.search(r"alert\('(.*)'\)", clear_response)
+            if alert_content:
+                clear_response_text = alert_content.group(1)
+            else:
+                clear_response_text = "未找到alert内容"
+
+            if "保存成功" in clear_response_text:
+                log.info(
+                    f"清除限制成功，序号:{i+1:2d}，课程:{item['课程名称']}，老师:{item['授课教师']}"
+                )
+            else:
+                log.warning(
+                    f"清除限制可能失败，序号:{i+1:2d}，课程:{item['课程名称']}，老师:{item['授课教师']}，返回:{clear_response_text}"
+                )
+
+        log.info("步骤1完成: 所有课程已用89分策略预打分")
+        log.info("\n步骤2: 开始按照选定策略重新打分...")
+
         for i, item in enumerate(xspj_list_json):
             # 根据是否在高分列表中选择策略
             if i in high_score_indices:

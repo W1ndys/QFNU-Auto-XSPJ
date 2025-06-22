@@ -36,6 +36,21 @@ class XspjSave(LoginManager):
                     "良",
                 ],
             },
+            "scenario_clear": {
+                "description": "清除限制用的89分策略",
+                "grades": [
+                    "优",
+                    "优",
+                    "优",
+                    "优",
+                    "优",
+                    "优",
+                    "良",
+                    "及格",
+                    "中",
+                    "良",
+                ],
+            },
         }
 
     def get_xspj_save_html(self):
@@ -175,3 +190,30 @@ class XspjSave(LoginManager):
         """
         response = self.session.post(self.save_do_url, data=payload)
         return response.text
+
+    def clear_restrictions_with_89(self):
+        """
+        先用89分策略打分来清除系统限制
+
+        Returns:
+            str: 服务器响应文本
+        """
+        try:
+            # 获取评教页面HTML
+            html_content = self.get_xspj_save_html()
+
+            # 使用清除限制的策略生成payload
+            payload = self.extract_evaluation_payload(html_content, "scenario_clear")
+
+            if "error" in payload:
+                return f"清除限制失败: {payload['error']}"
+
+            # 先提交（issubmit=1）而不是保存
+            payload["issubmit"] = "1"
+
+            # 发送请求
+            response = self.save_do(payload)
+            return response
+
+        except Exception as e:
+            return f"清除限制时发生异常: {e}"
