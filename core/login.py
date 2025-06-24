@@ -39,6 +39,7 @@ class LoginManager:
                 f"配置文件不存在 {config_path}，请在根目录下创建 .env 文件，并填写相关信息"
             )
             exit(0)
+        log.info(f"获取用户配置成功: {os.getenv('USER_ACCOUNT')}")
         return os.getenv("USER_ACCOUNT"), os.getenv("USER_PASSWORD")
 
     def _handle_captcha(self):
