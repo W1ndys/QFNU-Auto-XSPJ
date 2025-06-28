@@ -16,7 +16,7 @@ def setup_logger():
         os.makedirs(log_dir)
 
     # 获取根logger
-    logger = logging.getLogger("QFU-Auto-XSPJ")  # 建议给logger一个名字
+    logger = logging.getLogger("QFNU-CAS-TOKEN")
     if logger.hasHandlers():  # 防止重复添加handler
         logger.handlers.clear()
 
@@ -25,13 +25,15 @@ def setup_logger():
     # 配置文件处理器
     file_handler = logging.FileHandler(
         os.path.join(
-            log_dir, f'app_{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.log'
+            log_dir,
+            f'QFNU-CAS-TOKEN_{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.log',
         ),
         encoding="utf-8",
     )
     file_formatter = logging.Formatter(
         "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     )
+    file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(file_formatter)
 
     # 配置控制台处理器
