@@ -16,7 +16,7 @@ def setup_logger():
         os.makedirs(log_dir)
 
     # 获取根logger
-    logger = logging.getLogger("QFNU-CAS-TOKEN")
+    logger = logging.getLogger("QFNU-Auto-XSPJ")
     if logger.hasHandlers():  # 防止重复添加handler
         logger.handlers.clear()
 
