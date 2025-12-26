@@ -80,7 +80,7 @@ class XspjList(LoginManager):
                 return total_pages
 
         # 如果找不到分页信息，检查是否有"下一页"按钮来判断是否有多页
-        next_page_elements = soup.find_all("a", string=re.compile(r"下一页|next", re.I))
+        next_page_elements = soup.find_all("a", text=re.compile(r"下一页|next", re.I))
         if next_page_elements:
             log.debug("检测到下一页按钮，但无法确定总页数，将逐页获取")
             return self._get_total_pages_by_iteration()
