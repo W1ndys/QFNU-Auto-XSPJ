@@ -1,12 +1,8 @@
 # core/xspj_save.py
 # 保存打分结果
-from utils.logger import log
 from core.login import LoginManager
-from core.xspj_find import XspjFind
-from core.xspj_list import XspjList
 from bs4 import BeautifulSoup
 import re
-import json
 
 
 class XspjSave(LoginManager):

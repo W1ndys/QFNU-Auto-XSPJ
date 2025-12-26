@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 # core/login.py
-from PIL import Image
-from io import BytesIO
 import os
 import logging
 import datetime
 from dotenv import load_dotenv
 from utils.session_manager import get_session
-from utils.captcha_ocr import get_ocr_res
 import time
 import base64
 import requests
