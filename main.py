@@ -35,7 +35,7 @@ if __name__ == "__main__":
         pjcode = "曲奇教务666"
 
         user_input = input(
-            "请关注微信公众号【曲奇教务】，发送“一键评教”获取验证码后输入继续："
+            "请关注微信公众号【曲奇教务】，发送“一键评教”获取验证码后输入继续\n"
         )
 
         if user_input.strip() != pjcode:
