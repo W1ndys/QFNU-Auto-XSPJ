@@ -16,11 +16,13 @@ def print_welcome_info():
     log.info("欢迎使用曲阜师范大学自动评教脚本")
     log.info("=" * 80)
     log.info("\n\n")
-    log.info("作者: W1ndys")
+    log.info("作者: W1ndys （卷卷）")
     log.info("开源地址: https://github.com/W1ndys")
-    log.info("欢迎关注微信公众号: 【W1ndys】获取更多脚本")
     log.info(
-        "欢迎加入群聊【Easy-QFNU｜曲师大选课指北】：https://qm.qq.com/q/yvDbx9NeCI 群号：497554955"
+        "曲奇教务是一个第三方教务查询工具，为移动端友好而生，有22级师哥个人维护，支持查课表、成绩、考试安排、选课结果、预选课数据、空闲教室、选课推荐、培养方案.......欢迎使用 官网： https://easy-qfnu.top ， 关注微信公众号【曲奇教务】防止迷路"
+    )
+    log.info(
+        "欢迎加入曲奇教务QQ交流群 1053432087，点击链接加入群聊【曲奇教务Easy-QFNU】：https://qm.qq.com/q/MnYOk4ajaq"
     )
     log.info("=" * 80)
     log.info("\n\n")
