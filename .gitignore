@@ -194,3 +194,6 @@ cython_debug/
 .cursorindexingignore
 
 http_data/
+main.exe
+main.build/
+main.dist/
