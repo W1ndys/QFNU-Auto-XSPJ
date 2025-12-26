@@ -31,6 +31,17 @@ def print_welcome_info():
 if __name__ == "__main__":
     try:
         print_welcome_info()
+
+        qqjw_web = "easy-qfnu.top"
+
+        user_input = input(
+            f"曲奇教务官网是什么？（提示: 不带https://和www.，例如 xxx-xxx.xxx）"
+        )
+
+        if user_input.strip() != qqjw_web:
+            log.error("输入错误，程序退出")
+            exit(0)
+
         # 初始登录
         login_manager = LoginManager()
         if not login_manager.simulate_login():
