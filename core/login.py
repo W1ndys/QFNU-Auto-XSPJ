@@ -32,14 +32,19 @@ class LoginManager:
         获取用户配置
         返回: (用户账号, 用户密码)
         """
-        config_path = ".env"
-        if not os.path.exists(config_path):
-            log.error(
-                f"配置文件不存在 {config_path}，请在根目录下创建 .env 文件，并填写相关信息"
-            )
-            exit(0)
-        log.info(f"获取用户配置成功: {os.getenv('USER_ACCOUNT')}")
-        return os.getenv("USER_ACCOUNT"), os.getenv("USER_PASSWORD")
+        # 尝试从环境变量获取
+        account = os.getenv("USER_ACCOUNT")
+        password = os.getenv("USER_PASSWORD")
+
+        if account and password:
+            log.info(f"获取用户配置成功: {account}")
+            return account, password
+
+        log.warning("未找到账号密码配置，请手动输入")
+        print("请输入教务系统账号和密码:")
+        account = input("账号: ").strip()
+        password = input("密码: ").strip()
+        return account, password
 
     def _handle_captcha(self):
         """

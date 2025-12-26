@@ -32,13 +32,13 @@ if __name__ == "__main__":
     try:
         print_welcome_info()
 
-        qqjw_web = "easy-qfnu.top"
+        pjcode = "曲奇教务666"
 
         user_input = input(
-            f"曲奇教务官网是什么？（提示: 不带https://和www.，例如 xxx-xxx.xxx）"
+            "请关注微信公众号【曲奇教务】，发送“一键评教”获取验证码后输入继续："
         )
 
-        if user_input.strip() != qqjw_web:
+        if user_input.strip() != pjcode:
             log.error("输入错误，程序退出")
             exit(0)
 
