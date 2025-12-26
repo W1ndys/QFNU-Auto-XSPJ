@@ -242,10 +242,3 @@ if __name__ == "__main__":
         log.info("\n程序正常退出")
     except Exception as e:
         log.error(f"\n程序运行出现异常: {e}")
-    finally:
-        # 无论如何都打开二维码图片
-        try:
-            qr_path = "./assets/qrcode.jpg"
-            subprocess.run(["start", qr_path], shell=True, check=True)
-        except Exception as e:
-            log.warning(f"发生异常: {e}")
