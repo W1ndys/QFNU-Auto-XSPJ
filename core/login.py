@@ -10,6 +10,8 @@ from utils.session_manager import get_session
 from utils.captcha_ocr import get_ocr_res
 import time
 import base64
+import requests
+import subprocess
 from utils.logger import log
 
 
@@ -45,16 +47,56 @@ class LoginManager:
     def _handle_captcha(self):
         """
         获取并识别验证码
+        优先尝试OCR服务器，失败则转为手动输入
         返回: 识别出的验证码字符串
         """
         rand_code_url = f"{self.base_url}/jsxsd/verifycode.servlet"
         try:
             response = self.session.get(rand_code_url)
             response.raise_for_status()  # 如果请求失败则抛出HTTPError
-            image = Image.open(BytesIO(response.content))
-            return get_ocr_res(image)
+            image_content = response.content
+
+            # 1. 优先尝试OCR服务器
+            try:
+                ocr_server_url = "http://127.0.0.1:9898/ocr"
+                # 准备文件上传
+                files = {"file": ("captcha.jpg", image_content, "image/jpeg")}
+                # 设置短超时，避免阻塞太久
+                ocr_resp = requests.post(ocr_server_url, files=files, timeout=2)
+
+                if ocr_resp.status_code == 200:
+                    res_json = ocr_resp.json()
+                    if "result" in res_json:
+                        ocr_result = res_json["result"]
+                        log.info(f"OCR服务器识别成功: {ocr_result}")
+                        return ocr_result
+            except Exception as e:
+                log.warning(f"OCR服务器连接失败或识别出错: {e}，转为手动输入模式")
+
+            # 2. 失败则转为手动输入
+            log.info("正在转入手动输入验证码模式...")
+            captcha_path = "captcha.jpg"
+
+            # 保存图片到本地
+            with open(captcha_path, "wb") as f:
+                f.write(image_content)
+
+            # 打开图片 (Windows)
+            try:
+                if os.name == "nt":
+                    os.startfile(captcha_path)
+                else:
+                    # 对于非Windows系统，尝试使用subprocess调用默认查看器
+                    subprocess.run(["xdg-open", captcha_path], check=False)
+            except Exception as e:
+                log.warning(f"自动打开图片失败，请手动查看目录下 {captcha_path}: {e}")
+
+            # 获取用户输入
+            user_input = input("请输入验证码(查看弹出的图片): ").strip()
+            return user_input
+
         except Exception as e:
-            log.error(f"请求或识别验证码失败: {e}")
+            log.error(f"获取验证码失败: {e}")
             return None
 
     def _generate_encoded_string(self):
