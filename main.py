@@ -237,8 +237,8 @@ if __name__ == "__main__":
         log.info(f"标准策略: {len(xspj_list_json) - len(high_score_indices)} 门课程")
 
     except KeyboardInterrupt:
-        log.info("\n用户主动退出程序 (Ctrl+C)")
+        log.info("用户主动退出程序 (Ctrl+C)")
     except SystemExit:
-        log.info("\n程序正常退出")
+        log.info("程序正常退出")
     except Exception as e:
-        log.error(f"\n程序运行出现异常: {e}")
+        log.error(f"程序运行出现异常: {e}")
