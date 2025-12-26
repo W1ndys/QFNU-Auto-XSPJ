@@ -44,6 +44,11 @@ class LoginManager:
         print("请输入教务系统账号和密码:")
         account = input("账号: ").strip()
         password = input("密码: ").strip()
+
+        # 将输入的账号密码保存到环境变量中，避免后续重复输入
+        os.environ["USER_ACCOUNT"] = account
+        os.environ["USER_PASSWORD"] = password
+
         return account, password
 
     def _handle_captcha(self):
